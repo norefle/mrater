@@ -1,0 +1,16 @@
+.gitignore
+.git/
+
+**/.vscode/
+*.code-workspace
+
+**/__pycache__/
+**/.mypy_cache
+**/__cache__/
+**/.pytest_cache/
+**/tests/
+
+**/*.egg-info
+**/*.pyc
+
+README.md

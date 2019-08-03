@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/dragula.min.css" />
+</head>
+
+<body>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">{{ title }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ page }}</li>
+        </ol>
+    </nav>
+    <div <div class="container-fluid">
+        <div class="d-flex" id="main-card-container">
+            <div class="m-2 flex-fill card" id="{{ main.id }}">
+                <div class="d-flex">
+                    <div class="flex-fill mr-2 text-center">
+                        <img src="/img/{{ main.poster }}" class="img-fluid" style="max-height: 400px;">
+                    </div>
+                    <div class="flex-fill w-50">
+                        <h3 class="card-title">{{ main.title }}</h3>
+                        <h6 class="card-subtitle text-muted">{{ main.rating }}</h6>
+                        <p>{{ main.description }}</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">&nbsp;</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex m-2">
+            <div class="mr-auto">
+                <span>
+                    Drag and drop items in order you think right
+                    and then click the button on the right.
+                </span>
+            </div>
+            {% if last_page %}
+            <button type="button" class="btn btn-success" onclick="push('{{ page }}')">Done</button>
+            {% else %}
+            <button type="button" class="btn btn-primary" onclick="push('{{ page }}')">Submit</button>
+            {% endif %}
+        </div>
+        <div class="d-flex" id="card-container">
+            {% for item in all %}
+            <div class="m-2 flex-fill card" id="{{ item.id }}">
+                <div class="card-body text-center">
+                    <img src="/img/{{ item.poster }}" class="img-fluid" style="max-height:400px;" alt="Candidate 1">
+                    <h5 class="card-title">{{item.title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ item.rating }}</h6>
+                    <p class="cord-text">
+                        {{ item.description }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Scripts -->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="/static/js/dragula.min.js"></script>
+
+    <script>
+        let drake;
+        (function () {
+            drake = dragula([document.getElementById("card-container")]);
+        })();
+
+        function push(page) {
+            let main_id = $("#main-card-container").children()[0].id;
+            let sorted_children = [];
+            $("#card-container").children().each((_, e) => {
+                sorted_children.push($(e).attr("id"));
+            });
+            let data = JSON.stringify({
+                "id": main_id,
+                "sorted": sorted_children,
+                "page": page
+            });
+            $.ajax({
+                url: "/next",
+                type: "post",
+                data: data,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    location.assign(data.next);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
