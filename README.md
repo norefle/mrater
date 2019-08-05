@@ -1,7 +1,7 @@
 # MRater
 
 This is a template project for user studies. It provides scaffolding
-of pages containing a main item with all the required data and related
+of pages containing the main item with all the required data and related
 sorted items recommended by the system.
 
 The user can sort the recommendations by dragging and dropping them.
@@ -20,13 +20,13 @@ Install dependencies int virtual environment:
 poetry install
 ```
 
-Run a local flask server in development mode:
+Run a local flask server in a development mode:
 
 ```
 FLASK_APP=app FLASK_ENV=development poetry run flask run -h 0.0.0.0 -p 8080 --reload --debugger --extra-files templates:static
 ```
 
-Run a local gunicorn server:
+Run a local gunicorn server in development mode:
 
 ```
 poetry run gunicorn --bind 0.0.0.0:8080 app:app --reload
@@ -34,9 +34,9 @@ poetry run gunicorn --bind 0.0.0.0:8080 app:app --reload
 
 ### Docker
 
-Another option is to have docker only. None of the above is required.
+Another option is to use docker only, then none of the above is required.
 
-Build image locally, assuming docker image name is `norefle/mrater`:
+Build an image locally, assuming its name is `norefle/mrater`:
 
 ```
  docker build -t norefle/mrater .
@@ -60,4 +60,4 @@ library has been used.
 
 **Images**
 
-All test posters and text have been taken from wikipedia.
+All test posters and texts have been taken from Wikipedia.
